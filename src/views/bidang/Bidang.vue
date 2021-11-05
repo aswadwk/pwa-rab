@@ -41,7 +41,6 @@
     </CCardBody>
   </CCard>
 
-
   <CModal
     :visible="visibleLiveDemo"
     @close="
