@@ -1,7 +1,7 @@
 <template>
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
-      <h4>List Bidang</h4>
+      <h4>List Kegiatan</h4>
       <!-- <CButton color="primary">Tambah Kegiatan</CButton> -->
     </CCardHeader>
     <CCardBody>
@@ -16,23 +16,25 @@
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Nama Bidang</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Nama Tanggan</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Uraian</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
           <CTableRow
-            v-for="(x, index) in filteredRows"
+            v-for="(x, index) in anggaran"
             :key="x.id"
-            @click="addKategori(x)"
+            @click="detailAnggaran(x)"
           >
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
-            <CTableDataCell>{{ x.nama_anggaran }}</CTableDataCell>
+            <CTableDataCell>{{ x.created_at }}</CTableDataCell>
+            <CTableDataCell>{{ x.uraian }}</CTableDataCell>
           </CTableRow>
         </CTableBody>
       </CTable>
     </CCardBody>
   </CCard>
-  <!-- modal tambah kategori -->
+  <!-- modal tambah Anggaran -->
   <CModal
     size="xl"
     :visible="visibleLiveDemo"
@@ -43,23 +45,23 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Tambahn Anggaran </CModalTitle>
+      <CModalTitle>Detail Anggaran</CModalTitle>
     </CModalHeader>
     <CModalBody>
       <div class="d-flex justify-content-between">
         <h2>{{ xBidang }}</h2>
         <div>
-          <button class="btn btn-sm btn-danger" @click="hapusBidang">
+          <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
             Hapus
           </button>
         </div>
       </div>
       <div class="submit-form">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="anggaran">Nama Kegiatan</label>
           <input
             :value="xId"
-            v-bind="form.idKegiatan"
+            v-bind="form.idAnggaran"
             type="text"
             class="form-control"
             required
@@ -74,18 +76,49 @@
             name="anggaran"
             readonly
           />
-        </div>
-
-        <div class="form-group">
-          <label for="namaanggaran">Nama Kegiatan</label>
-          <input
-            id="namaKegiatan"
-            v-model="form.namaKegiatan"
-            class="form-control"
-            required
-            name="kategori"
-          />
-        </div>
+        </div> -->
+        <CTable hover>
+          <CTableBody>
+            <CTableRow>
+              <CTableHeaderCell scope="row">Uraian</CTableHeaderCell>
+              <CTableHeaderCell scope="row">Volume</CTableHeaderCell>
+              <CTableHeaderCell scope="row">Satuan</CTableHeaderCell>
+              <CTableHeaderCell scope="row">Harga Satuan</CTableHeaderCell>
+              <CTableHeaderCell scope="row">Total</CTableHeaderCell>
+              <CTableHeaderCell scope="row" class="text-center"
+                >Aksi</CTableHeaderCell
+              >
+            </CTableRow>
+            <CTableRow>
+              <CTableHeaderCell scope="row">{{
+                uraianDetail
+              }}</CTableHeaderCell>
+              <CTableHeaderCell scope="row">{{
+                volumeDetail
+              }}</CTableHeaderCell>
+              <CTableHeaderCell scope="row">{{
+                satuanDetail
+              }}</CTableHeaderCell>
+              <CTableHeaderCell scope="row">{{
+                hargaSatuanDetail
+              }}</CTableHeaderCell>
+              <CTableHeaderCell scope="row">{{
+                jummlahTotalDetail
+              }}</CTableHeaderCell>
+              <CTableHeaderCell scope="row" class="text-center">
+                <button
+                  class="btn btn-sm btn-success mx-3"
+                  @click="downloadAnggaran"
+                >
+                  Download
+                </button>
+                <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
+                  Hapus
+                </button>
+              </CTableHeaderCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
       </div>
     </CModalBody>
     <CModalFooter>
@@ -99,12 +132,11 @@
       >
         Close
       </CButton>
-      <CButton color="primary" @click="saveKegiatan">Save changes</CButton>
+      <CButton color="primary" @click="saveAnggaran">Tambah Anggaran</CButton>
     </CModalFooter>
   </CModal>
 </template>
 <script>
-// import axios from '../../axios'
 import axios from 'axios'
 
 export default {
@@ -112,10 +144,14 @@ export default {
     return {
       filter: '',
       form: {
-        idKegiatan: '',
-        namaBidang: '',
-        namaKegiatan: '',
+        idAnggaran: '',
+        uraian: '',
+        volume: '',
+        satuan: '',
+        hargaSatuan: '',
+        total: '',
       },
+      jumlahTotal: '',
 
       anggaran: [],
       visibleLiveDemo: false,
@@ -137,22 +173,67 @@ export default {
       .catch((err) => console.log(err))
   },
   methods: {
-    addKategori(x) {
-      this.visibleLiveDemo = true
-      console.log(x)
-      this.xBidang = x.nama_anggaran
-      this.xId = x.id
+    vTotal() {
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
     },
-    saveKegiatan() {
+    sTotal() {
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
+    },
+    detailAnggaran(x) {
+      this.visibleLiveDemo = true
+      // console.log(x)
+      this.xId = x.id
+
+      this.uraianDetail = x.uraian
+      this.volumeDetail = x.volume
+      this.satuanDetail = x.satuan
+      this.hargaSatuanDetail = x.harga_satuan
+      this.jummlahTotalDetail = x.jumlah_total
+      this.createAtDetail = x.created_at
+    },
+    saveAnggaran() {
       const data = {
         anggaran_id: this.xId,
-        nama_anggaran: this.form.namaKegiatan,
+        uraian: this.form.uraian,
+        volume: this.form.volume,
+        satuan: this.form.satuan,
+        harga_satuan: this.form.hargaSatuan,
+        jumlah_total: this.form.volume * this.form.hargaSatuan,
       }
       console.log(data)
       axios
         .post('//api.zahrazhafira.com/api/anggaran', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
+    },
+    hapusAnggaran() {
+      this.visibleLiveDemo = false
+
+      const getAnggaran = async () => {
+        try {
+          const resp = await axios.get('//api.zahrazhafira.com/api/anggaran')
+          console.log(resp.data.data)
+          this.anggaran = resp.data.data
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      const deleteAnggaran = async () => {
+        try {
+          const resp = await axios.delete(
+            `//api.zahrazhafira.com/api/anggaran/${this.xId}`,
+          )
+          console.log(resp.data)
+          getAnggaran()
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      deleteAnggaran()
     },
   },
 }

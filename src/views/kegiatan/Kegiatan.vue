@@ -1,7 +1,7 @@
 <template>
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
-      <h4>List Bidang</h4>
+      <h4>List Kegiatan</h4>
       <!-- <CButton color="primary">Tambah Kegiatan</CButton> -->
     </CCardHeader>
     <CCardBody>
@@ -32,7 +32,7 @@
       </CTable>
     </CCardBody>
   </CCard>
-  <!-- modal tambah kategori -->
+  <!-- modal tambah Anggaran -->
   <CModal
     size="xl"
     :visible="visibleLiveDemo"
@@ -43,13 +43,13 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Tambahn Anggaran </CModalTitle>
+      <CModalTitle>Tambah Anggaran </CModalTitle>
     </CModalHeader>
     <CModalBody>
       <div class="d-flex justify-content-between">
         <h2>{{ xBidang }}</h2>
         <div>
-          <button class="btn btn-sm btn-danger" @click="hapusBidang">
+          <button class="btn btn-sm btn-danger" @click="hapusKegiatan">
             Hapus
           </button>
         </div>
@@ -75,16 +75,55 @@
             readonly
           />
         </div>
-
         <div class="form-group">
-          <label for="namakegiatan">Nama Kegiatan</label>
+          <label for="namakegiatan">Uraian</label>
           <input
             id="namaKegiatan"
-            v-model="form.namaKegiatan"
-            class="form-control"
+            v-model="form.uraian"
+            class="form-control mb-2"
             required
             name="kategori"
+            placeholder="masukkan uraian"
           />
+        </div>
+        <div class="form-group">
+          <label for="namakegiatan">Volume</label>
+          <input
+            id="namaKegiatan"
+            v-model="form.volume"
+            class="form-control mb-2"
+            required
+            name="kategori"
+            placeholder="masukkan volume"
+            @keyup="vTotal"
+          />
+        </div>
+        <div class="form-group">
+          <label for="namakegiatan">Satuan</label>
+          <input
+            id="namaKegiatan"
+            v-model="form.satuan"
+            class="form-control mb-2"
+            required
+            name="kategori"
+            placeholder="masukkan satuan"
+          />
+        </div>
+        <div class="form-group">
+          <label for="namakegiatan">Harga Satuan</label>
+          <input
+            id="namaKegiatan"
+            v-model="form.hargaSatuan"
+            class="form-control mb-2"
+            required
+            name="kategori"
+            placeholder="masukkan satuan"
+            @keyup="sTotal"
+          />
+        </div>
+        <div class="form-group">
+          <h4 class="text-center mt-2">Jumlah Total</h4>
+          <h2 class="text-center">{{ jumlahTotal }}</h2>
         </div>
       </div>
     </CModalBody>
@@ -99,7 +138,7 @@
       >
         Close
       </CButton>
-      <CButton color="primary" @click="saveKegiatan">Save changes</CButton>
+      <CButton color="primary" @click="saveAnggaran">Tambah Anggaran</CButton>
     </CModalFooter>
   </CModal>
 </template>
@@ -113,9 +152,13 @@ export default {
       filter: '',
       form: {
         idKegiatan: '',
-        namaBidang: '',
-        namaKegiatan: '',
+        uraian: '',
+        volume: '',
+        satuan: '',
+        hargaSatuan: '',
+        total: '',
       },
+      jumlahTotal: '',
 
       kegiatan: [],
       visibleLiveDemo: false,
@@ -138,22 +181,61 @@ export default {
       .catch((err) => console.log(err))
   },
   methods: {
+    vTotal() {
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
+    },
+    sTotal() {
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
+    },
     addKategori(x) {
       this.visibleLiveDemo = true
       console.log(x)
       this.xBidang = x.nama_kegiatan
       this.xId = x.id
     },
-    saveKegiatan() {
+    saveAnggaran() {
       const data = {
         kegiatan_id: this.xId,
-        nama_kegiatan: this.form.namaKegiatan,
+        uraian: this.form.uraian,
+        volume: this.form.volume,
+        satuan: this.form.satuan,
+        harga_satuan: this.form.hargaSatuan,
+        jumlah_total: this.form.volume * this.form.hargaSatuan,
       }
       console.log(data)
       axios
-        .post('//api.zahrazhafira.com/api/kegiatan', data)
+        .post('//api.zahrazhafira.com/api/anggaran', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
+    },
+    hapusKegiatan() {
+      this.visibleLiveDemo = false
+
+      const getKegiatan = async () => {
+        try {
+          const resp = await axios.get('//api.zahrazhafira.com/api/kegiatan')
+          console.log(resp.data.data)
+          this.kegiatan = resp.data.data
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      const deleteKegiatan = async () => {
+        try {
+          const resp = await axios.delete(
+            `//api.zahrazhafira.com/api/kegiatan/${this.xId}`,
+          )
+          console.log(resp.data)
+          getKegiatan()
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      deleteKegiatan()
     },
   },
 }
