@@ -30,7 +30,16 @@
                   </CInputGroup>
                   <CRow>
                     <CCol :xs="5">
-                      <CButton color="primary col" class="px-4">Login</CButton>
+                      <CButton
+                        color="primary col"
+                        class="px-4"
+                        @click="
+                          () => {
+                            this.$router.push('dashboard')
+                          }
+                        "
+                        >Login</CButton
+                      >
                     </CCol>
                   </CRow>
                 </CForm>

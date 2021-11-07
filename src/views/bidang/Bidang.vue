@@ -32,7 +32,7 @@
       </CTable>
     </CCardBody>
   </CCard>
-  <!-- modal tambah kategori -->
+  <!-- modal tambah kegiatan -->
   <CModal
     size="xl"
     :visible="visibleLiveDemo"
@@ -43,18 +43,24 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Tambahn Kegiatan </CModalTitle>
+      <CModalTitle>Tambah Kegiatan </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <h3 class="text-center">{{ xBidang }}</h3>
+      <h3 class="d-flex justify-content-between">
+        <h2>{{ xBidang }}</h2>
+        <div>
+          <button class="btn btn-sm btn-danger" @click="hapusBidang">
+            Hapus
+          </button>
+        </div>
+      </h3>
       <div class="submit-form">
         <div class="form-group">
           <label for="bidang">Nama Bidang</label>
           <input
             :value="xId"
-            v-bind="form.idBidang"
-            type="text"
-            class="form-control mb-2"
+            type="hidden"
+            class="form-control mb-5"
             required
             name="idbidang"
             readonly
@@ -68,7 +74,6 @@
             readonly
           />
         </div>
-
         <div class="form-group">
           <label for="namakegiatan">Nama Kegiatan</label>
           <input
@@ -90,9 +95,9 @@
           }
         "
       >
-        Close
+        Batal
       </CButton>
-      <CButton color="primary" @click="saveKegiatan">Save changes</CButton>
+      <CButton color="primary" @click="saveKegiatan">Tambah Kegiatan</CButton>
     </CModalFooter>
   </CModal>
 
@@ -155,6 +160,8 @@ export default {
         nama_bidang: '',
       },
 
+      xId: '',
+
       bidang: [],
       visibleLiveDemo: false,
       modalTambahBidang: false,
@@ -195,6 +202,8 @@ export default {
         .post('//api.zahrazhafira.com/api/kegiatan', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
+
+      this.visibleLiveDemo = false
     },
     saveBidang() {
       const data = {
@@ -209,6 +218,45 @@ export default {
       this.bidang.push(data)
       this.formAddBidang.namaBidang = ''
       this.modalTambahBidang = false
+    },
+    hapusBidang() {
+      this.visibleLiveDemo = false
+
+      const getBidang = async () => {
+        try {
+          const resp = await axios.get('//api.zahrazhafira.com/api/bidang')
+          console.log(resp.data.data)
+          this.bidang = resp.data.data
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      const deleteBidang = async () => {
+        try {
+          const resp = await axios.delete(
+            `//api.zahrazhafira.com/api/bidang/${this.xId}`,
+          )
+          console.log(resp.data)
+          getBidang()
+        } catch (err) {
+          // Handle Error Here
+          console.error(err)
+        }
+      }
+
+      deleteBidang()
+
+      // axios
+      //   .delete(`//api.zahrazhafira.com/api/bidang/${this.xId}`)
+      //   .then((res) => console.log(res))
+      //   .catch((err) => console.log(err))
+
+      // axios
+      //   .get('//api.zahrazhafira.com/api/bidang')
+      //   .then((res) => (this.bidang = res.data.data))
+      //   .catch((err) => console.log(err))
     },
   },
 }

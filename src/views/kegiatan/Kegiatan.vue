@@ -2,7 +2,7 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Bidang</h4>
-      <CButton color="primary">Tambah Kegiatan</CButton>
+      <!-- <CButton color="primary">Tambah Kegiatan</CButton> -->
     </CCardHeader>
     <CCardBody>
       <CCardTitle>List Kegiatan yang terdaftar</CCardTitle>
@@ -46,7 +46,14 @@
       <CModalTitle>Tambahn Anggaran </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <h3 class="text-center">{{ xBidang }}</h3>
+      <div class="d-flex justify-content-between">
+        <h2>{{ xBidang }}</h2>
+        <div>
+          <button class="btn btn-sm btn-danger" @click="hapusBidang">
+            Hapus
+          </button>
+        </div>
+      </div>
       <div class="submit-form">
         <div class="form-group">
           <label for="kegiatan">Nama Kegiatan</label>
@@ -54,7 +61,7 @@
             :value="xId"
             v-bind="form.idKegiatan"
             type="text"
-            class="form-control mb-2"
+            class="form-control"
             required
             name="idkegiatan"
             readonly
@@ -62,7 +69,7 @@
           <input
             :value="xBidang"
             type="text"
-            class="form-control"
+            class="form-control mb-3"
             required
             name="kegiatan"
             readonly

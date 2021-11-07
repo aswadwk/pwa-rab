@@ -7,7 +7,16 @@
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Account
       </CDropdownHeader>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
+      <CDropdownItem
+        @click="
+          () => {
+            $router.push('login')
+          }
+        "
+      >
+        <CIcon icon="cil-lock-locked" />
+        Logout
+      </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
