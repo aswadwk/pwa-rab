@@ -2,7 +2,7 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Bidang</h4>
-      <CButton color="primary">Tambah Bidang</CButton>
+      <CButton color="primary" @click="addBidang()">Tambah Bidang</CButton>
     </CCardHeader>
     <CCardBody>
       <CCardTitle>List Bidang yang terdaftar</CCardTitle>
@@ -12,11 +12,6 @@
         type="text"
         placeholder="Filter"
       />
-      <CCardText>
-        <!-- List Bidang yang terdaftar -->
-      </CCardText>
-
-      <!-- Table -->
       <CTable hover>
         <CTableHead>
           <CTableRow>
@@ -37,7 +32,7 @@
       </CTable>
     </CCardBody>
   </CCard>
-
+  <!-- modal tambah kategori -->
   <CModal
     size="xl"
     :visible="visibleLiveDemo"
@@ -100,6 +95,48 @@
       <CButton color="primary" @click="saveKegiatan">Save changes</CButton>
     </CModalFooter>
   </CModal>
+
+  <!-- modal tambah bidang -->
+  <CModal
+    size="xl"
+    :visible="modalTambahBidang"
+    @close="
+      () => {
+        modalTambahBidang = false
+      }
+    "
+  >
+    <CModalHeader>
+      <CModalTitle>Tambah Bidang </CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+      <div class="submit-form">
+        <div class="form-group">
+          <label for="bidang">Nama Bidang</label>
+          <input
+            v-model="formAddBidang.namaBidang"
+            type="text"
+            class="form-control mb-2"
+            required
+            name="namabidang"
+          />
+        </div>
+      </div>
+    </CModalBody>
+    <CModalFooter>
+      <CButton
+        color="secondary"
+        @click="
+          () => {
+            modalTambahBidang = false
+          }
+        "
+      >
+        Close
+      </CButton>
+      <CButton color="primary" @click="saveBidang">Save changes</CButton>
+    </CModalFooter>
+  </CModal>
 </template>
 <script>
 // import axios from '../../axios'
@@ -114,9 +151,13 @@ export default {
         namaBidang: '',
         namaKegiatan: '',
       },
+      formAddBidang: {
+        nama_bidang: '',
+      },
 
       bidang: [],
       visibleLiveDemo: false,
+      modalTambahBidang: false,
     }
   },
   computed: {
@@ -138,17 +179,36 @@ export default {
   methods: {
     addKategori(x) {
       this.visibleLiveDemo = true
-      console.log(x)
       this.xBidang = x.nama_bidang
       this.xId = x.id
     },
+    addBidang() {
+      this.modalTambahBidang = true
+    },
     saveKegiatan() {
       const data = {
-        idBidang: this.xId,
-        namaBidang: this.form.namaBidang,
-        namaKegiatan: this.form.namaKegiatan,
+        bidang_id: this.xId,
+        nama_kegiatan: this.form.namaKegiatan,
       }
       console.log(data)
+      axios
+        .post('//api.zahrazhafira.com/api/kegiatan', data)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+    },
+    saveBidang() {
+      const data = {
+        nama_bidang: this.formAddBidang.namaBidang,
+      }
+      console.log(data)
+      axios
+        .post('//api.zahrazhafira.com/api/bidang', data)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+
+      this.bidang.push(data)
+      this.formAddBidang.namaBidang = ''
+      this.modalTambahBidang = false
     },
   },
 }
