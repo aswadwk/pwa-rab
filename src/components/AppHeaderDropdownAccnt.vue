@@ -7,13 +7,7 @@
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Account
       </CDropdownHeader>
-      <CDropdownItem
-        @click="
-          () => {
-            $router.push('login')
-          }
-        "
-      >
+      <CDropdownItem @click="logout">
         <CIcon icon="cil-lock-locked" />
         Logout
       </CDropdownItem>
@@ -30,6 +24,15 @@ export default {
       avatar: avatar,
       itemsCount: 42,
     }
+  },
+  methods: {
+    logout() {
+      // remove user from local storage to log user out
+      localStorage.removeItem('currentUser')
+
+      return this.$router.push({ name: 'Pages' })
+      // currentUserSubject.next(null)
+    },
   },
 }
 </script>
