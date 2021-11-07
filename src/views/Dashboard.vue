@@ -211,6 +211,9 @@ import avatar6 from '@/assets/images/avatars/6.jpg'
 // import WidgetsStatsA from './widgets/WidgetsStatsTypeA.vue'
 import WidgetsStatsA from './widgets/WidgetsStatsTypeA.vue'
 
+// import { router } from '../router/index'
+import { authenticationService } from '../service/authentication.service'
+
 export default {
   name: 'Dashboard',
   components: {
@@ -340,6 +343,15 @@ export default {
       progressGroupExample2,
       progressGroupExample3,
     }
+  },
+  created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      return this.$router.push({ name: 'Pages' })
+    }
+
+    // get return url from route parameters or default to '/'
+    // this.returnUrl = this.$route.query.returnUrl || '/'
   },
 }
 </script>

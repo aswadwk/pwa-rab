@@ -1,6 +1,6 @@
 export const logo = [
-    '556 134',
-    `
+  '556 134',
+  `
   <title>vue</title>
   <g>
     <g style="fill:#1bbd93">
