@@ -176,7 +176,7 @@ export default {
   },
   mounted() {
     axios
-      .get('//api.zahrazhafira.com/api/kegiatan')
+      .get('kegiatan')
       .then((res) => (this.kegiatan = res.data.data))
       .catch((err) => console.log(err))
   },
@@ -204,7 +204,7 @@ export default {
       }
       console.log(data)
       axios
-        .post('//api.zahrazhafira.com/api/anggaran', data)
+        .post('anggaran', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
     },
@@ -213,7 +213,7 @@ export default {
 
       const getKegiatan = async () => {
         try {
-          const resp = await axios.get('//api.zahrazhafira.com/api/kegiatan')
+          const resp = await axios.get('kegiatan')
           console.log(resp.data.data)
           this.kegiatan = resp.data.data
         } catch (err) {
@@ -224,9 +224,7 @@ export default {
 
       const deleteKegiatan = async () => {
         try {
-          const resp = await axios.delete(
-            `//api.zahrazhafira.com/api/kegiatan/${this.xId}`,
-          )
+          const resp = await axios.delete(`kegiatan/${this.xId}`)
           console.log(resp.data)
           getKegiatan()
         } catch (err) {

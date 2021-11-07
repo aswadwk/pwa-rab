@@ -179,7 +179,8 @@ export default {
   },
   mounted() {
     axios
-      .get('//api.zahrazhafira.com/api/bidang')
+      .get('bidang')
+      // .get('bidang')
       .then((res) => (this.bidang = res.data.data))
       .catch((err) => console.log(err))
   },
@@ -199,7 +200,7 @@ export default {
       }
       console.log(data)
       axios
-        .post('//api.zahrazhafira.com/api/kegiatan', data)
+        .post('kegiatan', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
 
@@ -211,7 +212,7 @@ export default {
       }
       console.log(data)
       axios
-        .post('//api.zahrazhafira.com/api/bidang', data)
+        .post('bidang', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
 
@@ -224,7 +225,7 @@ export default {
 
       const getBidang = async () => {
         try {
-          const resp = await axios.get('//api.zahrazhafira.com/api/bidang')
+          const resp = await axios.get('bidang')
           console.log(resp.data.data)
           this.bidang = resp.data.data
         } catch (err) {
@@ -235,9 +236,7 @@ export default {
 
       const deleteBidang = async () => {
         try {
-          const resp = await axios.delete(
-            `//api.zahrazhafira.com/api/bidang/${this.xId}`,
-          )
+          const resp = await axios.delete(`bidang/${this.xId}`)
           console.log(resp.data)
           getBidang()
         } catch (err) {
@@ -249,12 +248,12 @@ export default {
       deleteBidang()
 
       // axios
-      //   .delete(`//api.zahrazhafira.com/api/bidang/${this.xId}`)
+      //   .delete(`bidang/${this.xId}`)
       //   .then((res) => console.log(res))
       //   .catch((err) => console.log(err))
 
       // axios
-      //   .get('//api.zahrazhafira.com/api/bidang')
+      //   .get('bidang')
       //   .then((res) => (this.bidang = res.data.data))
       //   .catch((err) => console.log(err))
     },

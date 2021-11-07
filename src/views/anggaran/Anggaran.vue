@@ -168,7 +168,7 @@ export default {
   },
   mounted() {
     axios
-      .get('//api.zahrazhafira.com/api/anggaran')
+      .get('anggaran')
       .then((res) => (this.anggaran = res.data.data))
       .catch((err) => console.log(err))
   },
@@ -202,7 +202,7 @@ export default {
       }
       console.log(data)
       axios
-        .post('//api.zahrazhafira.com/api/anggaran', data)
+        .post('anggaran', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
     },
@@ -211,7 +211,7 @@ export default {
 
       const getAnggaran = async () => {
         try {
-          const resp = await axios.get('//api.zahrazhafira.com/api/anggaran')
+          const resp = await axios.get('anggaran')
           console.log(resp.data.data)
           this.anggaran = resp.data.data
         } catch (err) {
@@ -222,9 +222,7 @@ export default {
 
       const deleteAnggaran = async () => {
         try {
-          const resp = await axios.delete(
-            `//api.zahrazhafira.com/api/anggaran/${this.xId}`,
-          )
+          const resp = await axios.delete(`anggaran/${this.xId}`)
           console.log(resp.data)
           getAnggaran()
         } catch (err) {
