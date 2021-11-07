@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="submit-form">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="kegiatan">Nama Kegiatan</label>
           <input
             :value="xId"
@@ -74,7 +74,7 @@
             name="kegiatan"
             readonly
           />
-        </div>
+        </div> -->
         <div class="form-group">
           <label for="namakegiatan">Uraian</label>
           <input
