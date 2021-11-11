@@ -55,9 +55,9 @@
                         <button class="btn btn-primary" :disabled="loading">
                           <span
                             v-show="loading"
-                            class="spinner-border spinner-border-sm"
+                            class="spinner-border spinner-border-sm mr-2"
                           ></span>
-                          <span>Login</span>
+                          <span class="mx-2">Login</span>
                         </button>
                       </div>
                     </CCol>
