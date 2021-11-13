@@ -48,14 +48,14 @@
       <CModalTitle>Detail Anggaran</CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <div class="d-flex justify-content-between">
+      <!-- <div class="d-flex justify-content-between">
         <h2>{{ xBidang }}</h2>
         <div>
           <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
             Hapus
           </button>
         </div>
-      </div>
+      </div> -->
       <div class="submit-form">
         <!-- <div class="form-group">
           <label for="anggaran">Nama Kegiatan</label>
@@ -112,6 +112,11 @@
                 >
                   Download
                 </button>
+                <!-- <download-excel :data="json_data" :fields="json_fields">
+                  <button type="button" class="btn btn-sm btn-success">
+                    Download Excel
+                  </button>
+                </download-excel> -->
                 <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
                   Hapus
                 </button>
@@ -138,8 +143,13 @@
 </template>
 <script>
 import axios from 'axios'
+// import JsonExcel from '../../components/DownloadExcel.vue'
 
 export default {
+  components: {
+    // JsonExcel: JsonExcel,
+    // 'component-b': ComponentB
+  },
   data() {
     return {
       filter: '',
@@ -183,6 +193,7 @@ export default {
       this.visibleLiveDemo = true
       // console.log(x)
       this.xId = x.id
+      this.xKegiatanId = x.kegiatan_id
 
       this.uraianDetail = x.uraian
       this.volumeDetail = x.volume
@@ -232,6 +243,9 @@ export default {
       }
 
       deleteAnggaran()
+    },
+    downloadAnggaran() {
+      window.open('https://api.zahrazhafira.com/api/anggaran-excel', '_blank')
     },
   },
 }

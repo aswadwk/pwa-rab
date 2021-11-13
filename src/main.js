@@ -9,6 +9,9 @@ import CIcon from '@coreui/icons-vue'
 import { iconsSet as icons } from '@/assets/icons'
 import DocsCallout from '@/components/DocsCallout'
 import DocsExample from '@/components/DocsExample'
+
+import JsonExcel from "vue-json-excel";
+
 import './registerServiceWorker'
 
 axios.defaults.baseURL = 'https://api.zahrazhafira.com/api/'
@@ -21,5 +24,6 @@ app.provide('icons', icons)
 app.component('CIcon', CIcon)
 app.component('DocsCallout', DocsCallout)
 app.component('DocsExample', DocsExample)
+app.component('JsonExcel', JsonExcel)
 
 app.mount('#app')
