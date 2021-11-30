@@ -81,10 +81,10 @@
           <CTableBody>
             <CTableRow>
               <CTableHeaderCell scope="row">Uraian</CTableHeaderCell>
-              <CTableHeaderCell scope="row">Volume</CTableHeaderCell>
+              <!-- <CTableHeaderCell scope="row">Volume</CTableHeaderCell>
               <CTableHeaderCell scope="row">Satuan</CTableHeaderCell>
               <CTableHeaderCell scope="row">Harga Satuan</CTableHeaderCell>
-              <CTableHeaderCell scope="row">Total</CTableHeaderCell>
+              <CTableHeaderCell scope="row">Total</CTableHeaderCell> -->
               <CTableHeaderCell scope="row" class="text-center"
                 >Aksi</CTableHeaderCell
               >
@@ -93,7 +93,7 @@
               <CTableHeaderCell scope="row">{{
                 uraianDetail
               }}</CTableHeaderCell>
-              <CTableHeaderCell scope="row">{{
+              <!-- <CTableHeaderCell scope="row">{{
                 volumeDetail
               }}</CTableHeaderCell>
               <CTableHeaderCell scope="row">{{
@@ -104,7 +104,7 @@
               }}</CTableHeaderCell>
               <CTableHeaderCell scope="row">{{
                 jummlahTotalDetail
-              }}</CTableHeaderCell>
+              }}</CTableHeaderCell> -->
               <CTableHeaderCell scope="row" class="text-center">
                 <button
                   class="btn btn-sm btn-success mx-3"
@@ -117,9 +117,9 @@
                     Download Excel
                   </button>
                 </download-excel> -->
-                <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
+                <!-- <button class="btn btn-sm btn-danger" @click="hapusAnggaran">
                   Hapus
-                </button>
+                </button> -->
               </CTableHeaderCell>
             </CTableRow>
           </CTableBody>

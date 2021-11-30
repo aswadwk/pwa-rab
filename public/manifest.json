@@ -1,5 +1,11 @@
 {
-    "name": "App RAB",
+    "theme_color": "#417505",
+    "background_color": "#7ed321",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Rancangan Anggaran Biaya",
+    "short_name": "RAB",
     "icons": [{
             "src": "\/android-icon-36x36.png",
             "sizes": "36x36",
