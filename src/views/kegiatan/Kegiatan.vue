@@ -39,9 +39,7 @@
     @close="
       () => {
         visibleLiveDemo = false
-      }
-    "
-  >
+      }" v-if="role=='OPERATOR'">
     <CModalHeader>
       <CModalTitle>Tambah Anggaran </CModalTitle>
     </CModalHeader>
@@ -49,7 +47,7 @@
       <div class="d-flex justify-content-between">
         <h2>{{ xBidang }}</h2>
         <div>
-          <button class="btn btn-sm btn-danger" @click="hapusKegiatan">
+          <button class="btn btn-sm btn-danger" @click="hapusKegiatan" v-if="role=='OPERATOR'">
             Hapus
           </button>
         </div>
@@ -138,13 +136,15 @@
       >
         Close
       </CButton>
-      <CButton color="primary" @click="saveAnggaran">Tambah Anggaran</CButton>
+      <CButton color="primary" @click="saveAnggaran" v-if="role=='OPERATOR'">Tambah Anggaran</CButton>
     </CModalFooter>
   </CModal>
 </template>
 <script>
 // import axios from '../../axios'
 import axios from 'axios'
+import { authenticationService } from '../../service/authentication.service'
+
 
 export default {
   data() {
@@ -162,6 +162,17 @@ export default {
 
       kegiatan: [],
       visibleLiveDemo: false,
+    }
+  },
+   created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      // return this.$router.push({ name: 'Home' })
+      return this.$router.push({ name: 'Pages' })
+    }else{
+      console.log("User Auth : ", authenticationService.currentUserValue.role)
+      this.role=authenticationService.currentUserValue.role
+      console.log("role : ", this.role)
     }
   },
   computed: {

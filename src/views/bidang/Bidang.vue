@@ -2,7 +2,7 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Bidang</h4>
-      <CButton color="primary" @click="addBidang()">Tambah Bidang</CButton>
+      <CButton color="primary" @click="addBidang()" v-if="role=='OPERATOR'">Tambah Bidang</CButton>
     </CCardHeader>
     <CCardBody>
       <CCardTitle>List Bidang yang terdaftar</CCardTitle>
@@ -40,15 +40,14 @@
       () => {
         visibleLiveDemo = false
       }
-    "
-  >
+    " v-if="role=='OPERATOR'">
     <CModalHeader>
-      <CModalTitle>Tambah Kegiatan </CModalTitle>
+      <CModalTitle>Form Tambah Kegiatan </CModalTitle>
     </CModalHeader>
     <CModalBody>
       <h3 class="d-flex justify-content-between">
         <h2>{{ xBidang }}</h2>
-        <div>
+        <div v-if="role=='OPERATOR'">
           <button class="btn btn-sm btn-danger" @click="hapusBidang">
             Hapus
           </button>
@@ -75,7 +74,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="namakegiatan">Nama Kegiatan</label>
+          <label for="namakegiatan" style="margin-top: 10px">Nama Kegiatan</label>
           <input
             id="namaKegiatan"
             v-model="form.namaKegiatan"
@@ -97,7 +96,7 @@
       >
         Batal
       </CButton>
-      <CButton color="primary" @click="saveKegiatan">Tambah Kegiatan</CButton>
+      <CButton color="primary" @click="saveKegiatan" v-if="role=='OPERATOR'">Tambah Kegiatan</CButton>
     </CModalFooter>
   </CModal>
 
@@ -112,7 +111,7 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Tambah Bidang </CModalTitle>
+      <CModalTitle v-if="role=='OPERATOR'">Tambah Bidang </CModalTitle>
     </CModalHeader>
     <CModalBody>
       <div class="submit-form">
@@ -130,7 +129,7 @@
     </CModalBody>
     <CModalFooter>
       <CButton
-        color="secondary"
+        color="secondary" 
         @click="
           () => {
             modalTambahBidang = false
@@ -147,9 +146,12 @@
 // import axios from '../../axios'
 import axios from 'axios'
 
+import { authenticationService } from '../../service/authentication.service'
+
 export default {
   data() {
     return {
+      role:'',
       filter: '',
       form: {
         idBidang: '',
@@ -165,6 +167,17 @@ export default {
       bidang: [],
       visibleLiveDemo: false,
       modalTambahBidang: false,
+    }
+  },
+  created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      // return this.$router.push({ name: 'Home' })
+      return this.$router.push({ name: 'Pages' })
+    }else{
+      console.log("User Auth : ", authenticationService.currentUserValue.role)
+      this.role=authenticationService.currentUserValue.role
+      console.log("role : ", this.role)
     }
   },
   computed: {

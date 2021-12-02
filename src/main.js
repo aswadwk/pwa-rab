@@ -10,11 +10,12 @@ import { iconsSet as icons } from '@/assets/icons'
 import DocsCallout from '@/components/DocsCallout'
 import DocsExample from '@/components/DocsExample'
 
-import JsonExcel from "vue-json-excel";
+import JsonExcel from 'vue-json-excel'
 
 import './registerServiceWorker'
 
-axios.defaults.baseURL = 'https://api.zahrazhafira.com/api/'
+// axios.defaults.baseURL = 'https://api.zahrazhafira.com/api/'
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
 
 const app = createApp(App)
 app.use(store)

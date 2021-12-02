@@ -79,7 +79,7 @@
         </div> -->
         <CTable hover>
           <CTableBody>
-            <CTableRow>
+            <CTableRow>                            
               <CTableHeaderCell scope="row">Uraian</CTableHeaderCell>
               <!-- <CTableHeaderCell scope="row">Volume</CTableHeaderCell>
               <CTableHeaderCell scope="row">Satuan</CTableHeaderCell>
@@ -107,11 +107,17 @@
               }}</CTableHeaderCell> -->
               <CTableHeaderCell scope="row" class="text-center">
                 <button
+                  class="btn btn-sm btn-danger mx-3"
+                  @click="deleteAnggaran" v-if="role=='OPERATOR'"
+                >
+                  Delete
+                </button>              
+                <button
                   class="btn btn-sm btn-success mx-3"
                   @click="downloadAnggaran"
                 >
                   Download
-                </button>
+                </button>                
                 <!-- <download-excel :data="json_data" :fields="json_fields">
                   <button type="button" class="btn btn-sm btn-success">
                     Download Excel
@@ -137,13 +143,14 @@
       >
         Close
       </CButton>
-      <CButton color="primary" @click="saveAnggaran">Tambah Anggaran</CButton>
+      <!-- <CButton color="primary" @click="saveAnggaran">Tambah Anggaran</CButton> -->
     </CModalFooter>
   </CModal>
 </template>
 <script>
 import axios from 'axios'
 // import JsonExcel from '../../components/DownloadExcel.vue'
+import { authenticationService } from '../../service/authentication.service'
 
 export default {
   components: {
@@ -175,6 +182,17 @@ export default {
     //     return fKegiatan.includes(searchTerm)
     //   })
     // },
+  },
+   created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      // return this.$router.push({ name: 'Home' })
+      return this.$router.push({ name: 'Pages' })
+    }else{
+      console.log("User Auth : ", authenticationService.currentUserValue.role)
+      this.role=authenticationService.currentUserValue.role
+      console.log("role : ", this.role)
+    }
   },
   mounted() {
     axios
@@ -217,7 +235,7 @@ export default {
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
     },
-    hapusAnggaran() {
+    deleteAnggaran() {
       this.visibleLiveDemo = false
 
       const getAnggaran = async () => {
