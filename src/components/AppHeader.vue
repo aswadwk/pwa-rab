@@ -9,6 +9,7 @@
         <h4>RAB</h4>
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto"> </CHeaderNav>
+      <h3 class="float-right">{{ role }}</h3>
       <CHeaderNav>
         <AppHeaderDropdownAccnt />
       </CHeaderNav>
@@ -24,16 +25,29 @@
 import AppBreadcrumb from './AppBreadcrumb'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 import { logo } from '@/assets/brand/logo'
+import { authenticationService } from '../service/authentication.service'
 export default {
   name: 'AppHeader',
   components: {
     AppBreadcrumb,
     AppHeaderDropdownAccnt,
   },
+  created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      // return this.$router.push({ name: 'Home' })
+      return this.$router.push({ name: 'Pages' })
+    }else{
+      console.log("User Auth : ", authenticationService.currentUserValue.role)
+      this.role=authenticationService.currentUserValue.role
+      console.log("role : ", this.role)
+    }
+  },
   setup() {
     return {
       logo,
     }
   },
+   
 }
 </script>

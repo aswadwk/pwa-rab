@@ -136,7 +136,7 @@
       >
         Close
       </CButton>
-      <CButton color="primary" @click="saveAnggaran" v-if="role=='OPERATOR'">Tambah Anggaran</CButton>
+      <CButton color="primary" @click="saveAnggaran" v-if="role=='OPERATOR'">+ Tambah Anggaran</CButton>
     </CModalFooter>
   </CModal>
 </template>
@@ -218,6 +218,8 @@ export default {
         .post('anggaran', data)
         .then((res) => console.log(res))
         .catch((err) => console.log(err))
+        // close modal
+        this.visibleLiveDemo = false
     },
     hapusKegiatan() {
       this.visibleLiveDemo = false

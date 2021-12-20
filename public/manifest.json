@@ -2,8 +2,6 @@
     "theme_color": "#417505",
     "background_color": "#7ed321",
     "display": "standalone",
-    "scope": "/",
-    "start_url": "/",
     "name": "Rancangan Anggaran Biaya",
     "short_name": "RAB",
     "icons": [{

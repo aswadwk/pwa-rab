@@ -17,6 +17,7 @@
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
             <CTableHeaderCell scope="col">Nama Tanggan</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Kegiatan</CTableHeaderCell>
             <CTableHeaderCell scope="col">Uraian</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -28,6 +29,7 @@
           >
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
             <CTableDataCell>{{ x.created_at }}</CTableDataCell>
+            <CTableDataCell>{{ x.kegiatan.nama_kegiatan }}</CTableDataCell>
             <CTableDataCell>{{ x.uraian }}</CTableDataCell>
           </CTableRow>
         </CTableBody>
@@ -45,7 +47,7 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Detail Anggaran</CModalTitle>
+      <CModalTitle>Detail Anggaran {{xKegiatanId}}</CModalTitle>
     </CModalHeader>
     <CModalBody>
       <!-- <div class="d-flex justify-content-between">
@@ -114,7 +116,7 @@
                 </button>              
                 <button
                   class="btn btn-sm btn-success mx-3"
-                  @click="downloadAnggaran"
+                  @click="downloadAnggaran(xKegiatanId)"
                 >
                   Download
                 </button>                
@@ -262,8 +264,9 @@ export default {
 
       deleteAnggaran()
     },
-    downloadAnggaran() {
-      window.open('https://api.zahrazhafira.com/api/anggaran-excel', '_blank')
+    downloadAnggaran(xKegiatanId) {
+      // window.open(`https://api.passoloran.com/api/anggaran-excel/${xKegiatanId}`, '_blank')
+      window.open(`https://api.passoloran.com/api/anggaran-excel_id/${xKegiatanId}`, '_blank')
     },
   },
 }
