@@ -88,6 +88,11 @@ const routes = [
         name: 'Add Anggaran',
         component: () => import('@/views/anggaran/Add-Anggaran.vue'),
       },
+      {
+        path: '/user',
+        name: 'User',
+        component: () => import('@/views/user/User.vue'),
+      },
     ],
   },
 ]

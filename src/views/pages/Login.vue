@@ -7,8 +7,8 @@
             <CCardGroup>
               <CCard class="p-4">
                 <CCardBody>
-                  <h1>Login</h1>
-                  <p class="text-medium-emphasis">Sign In to your account</p>
+                  <h1>Rancangan Anggaran Biaya</h1>
+                  <p class="text-medium-emphasis">Silahkan Login !</p>
                   <CInputGroup class="mb-3">
                     <CInputGroupText>
                       <CIcon icon="cil-user" />
@@ -17,6 +17,7 @@
                       id="username"
                       v-model="username"
                       class="form-control"
+                      placeholder="Username"
                       required
                       name="username"
                     />
@@ -34,6 +35,7 @@
                     <input
                       id="password"
                       v-model="password"
+                      placeholder="Password"
                       type="password"
                       class="form-control"
                       required

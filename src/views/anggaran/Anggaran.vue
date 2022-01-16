@@ -1,11 +1,11 @@
 <template>
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
-      <h4>List Kegiatan</h4>
+      <h4>List Anggaran</h4>
       <!-- <CButton color="primary">Tambah Kegiatan</CButton> -->
     </CCardHeader>
     <CCardBody>
-      <CCardTitle>List Kegiatan yang terdaftar</CCardTitle>
+      <CCardTitle>List Anggaran yang terdaftar</CCardTitle>
       <input
         v-model="filter"
         class="form-control"
@@ -16,7 +16,7 @@
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Nama Tanggan</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Tanggal</CTableHeaderCell>
             <CTableHeaderCell scope="col">Kegiatan</CTableHeaderCell>
             <CTableHeaderCell scope="col">Uraian</CTableHeaderCell>
           </CTableRow>
@@ -29,7 +29,7 @@
           >
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
             <CTableDataCell>{{ x.created_at }}</CTableDataCell>
-            <CTableDataCell>{{ x.kegiatan.nama_kegiatan }}</CTableDataCell>
+            <CTableDataCell>{{ x.nama_kegiatan }}</CTableDataCell>
             <CTableDataCell>{{ x.uraian }}</CTableDataCell>
           </CTableRow>
         </CTableBody>
@@ -47,7 +47,7 @@
     "
   >
     <CModalHeader>
-      <CModalTitle>Detail Anggaran {{xKegiatanId}}</CModalTitle>
+      <CModalTitle>Detail Anggaran {{ xKegiatanId }}</CModalTitle>
     </CModalHeader>
     <CModalBody>
       <!-- <div class="d-flex justify-content-between">
@@ -81,7 +81,7 @@
         </div> -->
         <CTable hover>
           <CTableBody>
-            <CTableRow>                            
+            <CTableRow>
               <CTableHeaderCell scope="row">Uraian</CTableHeaderCell>
               <!-- <CTableHeaderCell scope="row">Volume</CTableHeaderCell>
               <CTableHeaderCell scope="row">Satuan</CTableHeaderCell>
@@ -109,17 +109,18 @@
               }}</CTableHeaderCell> -->
               <CTableHeaderCell scope="row" class="text-center">
                 <button
+                  v-if="role == 'OPERATOR'"
                   class="btn btn-sm btn-danger mx-3"
-                  @click="deleteAnggaran" v-if="role=='OPERATOR'"
+                  @click="deleteAnggaran"
                 >
                   Delete
-                </button>              
+                </button>
                 <button
                   class="btn btn-sm btn-success mx-3"
                   @click="downloadAnggaran(xKegiatanId)"
                 >
                   Download
-                </button>                
+                </button>
                 <!-- <download-excel :data="json_data" :fields="json_fields">
                   <button type="button" class="btn btn-sm btn-success">
                     Download Excel
@@ -185,15 +186,15 @@ export default {
     //   })
     // },
   },
-   created() {
+  created() {
     // redirect to home if already logged in
     if (!authenticationService.currentUserValue) {
       // return this.$router.push({ name: 'Home' })
       return this.$router.push({ name: 'Pages' })
-    }else{
-      console.log("User Auth : ", authenticationService.currentUserValue.role)
-      this.role=authenticationService.currentUserValue.role
-      console.log("role : ", this.role)
+    } else {
+      console.log('User Auth : ', authenticationService.currentUserValue.role)
+      this.role = authenticationService.currentUserValue.role
+      console.log('role : ', this.role)
     }
   },
   mounted() {
@@ -266,7 +267,10 @@ export default {
     },
     downloadAnggaran(xKegiatanId) {
       // window.open(`https://api.passoloran.com/api/anggaran-excel/${xKegiatanId}`, '_blank')
-      window.open(`https://api.passoloran.com/api/anggaran-excel_id/${xKegiatanId}`, '_blank')
+      window.open(
+        `https://api.passoloran.com/api/anggaran-excel_id/${xKegiatanId}`,
+        '_blank',
+      )
     },
   },
 }

@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- <WidgetsStatsA /> -->
+    <!-- <h2>Selamat datang !</h2> -->
     <WidgetsStatsA />
     <!-- <CRow>
       <CCol :md="12">

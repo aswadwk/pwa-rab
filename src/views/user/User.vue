@@ -1,13 +1,13 @@
 <template>
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
-      <h4>List Bidang</h4>
-      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addBidang()"
-        >Tambah Bidang</CButton
+      <h4>Daftar User</h4>
+      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addUser()"
+        >Tambah User</CButton
       >
     </CCardHeader>
     <CCardBody>
-      <CCardTitle>List Bidang yang terdaftar</CCardTitle>
+      <!-- <CCardTitle>Daftar User</CCardTitle> -->
       <input
         v-model="filter"
         class="form-control"
@@ -18,17 +18,35 @@
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
-            <CTableHeaderCell scope="col">Nama Bidang</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Nama</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Role</CTableHeaderCell>
+            <CTableHeaderCell
+              v-if="role == 'OPERATOR'"
+              scope="col"
+              class="text-center"
+              >Aksi</CTableHeaderCell
+            >
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          <CTableRow
-            v-for="(x, index) in filteredRows"
-            :key="x.id"
-            @click="addKategori(x)"
-          >
+          <CTableRow v-for="(x, index) in filteredRows" :key="x.id">
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
-            <CTableDataCell>{{ x.nama_bidang }}</CTableDataCell>
+            <CTableDataCell>{{ x.name }}</CTableDataCell>
+            <CTableDataCell>{{ x.role }}</CTableDataCell>
+            <CTableDataCell class="text-center">
+              <CButton
+                v-if="role == 'OPERATOR'"
+                color="primary"
+                @click="passwordReset(x.id)"
+                >Reset Password</CButton
+              >
+              <CButton
+                v-if="role == 'OPERATOR'"
+                class="btn btn-md btn-danger ml-2 mr-2"
+                @click="deleteUser(x.id)"
+                >Hapus</CButton
+              >
+            </CTableDataCell>
           </CTableRow>
         </CTableBody>
       </CTable>
@@ -111,25 +129,56 @@
   <!-- modal tambah bidang -->
   <CModal
     size="xl"
-    :visible="modalTambahBidang"
+    :visible="modalTambahUser"
     @close="
       () => {
-        modalTambahBidang = false
+        modalTambahUser = false
       }
     "
   >
     <CModalHeader>
-      <CModalTitle v-if="role == 'OPERATOR'">Tambah Bidang </CModalTitle>
+      <CModalTitle v-if="role == 'OPERATOR'">Tambah User </CModalTitle>
     </CModalHeader>
     <CModalBody>
       <div class="submit-form">
         <div class="form-group">
-          <label for="bidang">Nama Bidang</label>
+          <label for="bidang">Nama</label>
           <input
-            v-model="formAddBidang.namaBidang"
+            v-model="form.name"
             type="text"
             class="form-control mb-2"
             required
+            placeholder="Username"
+            name="namabidang"
+          />
+        </div>
+        <div class="form-group">
+          <label for="bidang">Role</label>
+          <select id="" v-model="form.role" name="" class="form-control mb-2">
+            <option value="">-Pilih Role-</option>
+            <option value="OPERATOR">OPERATOR</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bidang">Password</label>
+          <input
+            v-model="form.password"
+            type="password"
+            class="form-control mb-2"
+            placeholder="Password"
+            required
+            name="namabidang"
+          />
+        </div>
+        <div class="form-group">
+          <label for="bidang">Password Confirm</label>
+          <input
+            v-model="form.passwordConfirm"
+            type="password"
+            class="form-control mb-2"
+            required
+            placeholder="Password Confirm"
             name="namabidang"
           />
         </div>
@@ -140,18 +189,17 @@
         color="secondary"
         @click="
           () => {
-            modalTambahBidang = false
+            modalTambahUser = false
           }
         "
       >
-        Close
+        Batal
       </CButton>
-      <CButton color="primary" @click="saveBidang">Save changes</CButton>
+      <CButton color="primary" @click="saveUser">Tambah</CButton>
     </CModalFooter>
   </CModal>
 </template>
 <script>
-// import axios from '../../axios'
 import axios from 'axios'
 
 import { authenticationService } from '../../service/authentication.service'
@@ -162,28 +210,29 @@ export default {
       role: '',
       filter: '',
       form: {
-        idBidang: '',
-        namaBidang: '',
-        namaKegiatan: '',
+        name: '',
+        password: '',
+        passwordConfirm: '',
+        role: '',
       },
-      formAddBidang: {
-        nama_bidang: '',
-      },
+      // form: {
+      //   nama_bidang: '',
+      // },
 
       xId: '',
 
-      bidang: [],
+      user: [],
       visibleLiveDemo: false,
-      modalTambahBidang: false,
+      modalTambahUser: false,
     }
   },
   computed: {
     filteredRows() {
-      return this.bidang.filter((bidang) => {
-        const fBidang = bidang.nama_bidang.toString().toLowerCase()
+      return this.user.filter((user) => {
+        const fUser = user.name.toString().toLowerCase()
         const searchTerm = this.filter.toLowerCase()
 
-        return fBidang.includes(searchTerm)
+        return fUser.includes(searchTerm)
       })
     },
   },
@@ -200,9 +249,9 @@ export default {
   },
   mounted() {
     axios
-      .get('bidang')
+      .get('user')
       // .get('bidang')
-      .then((res) => (this.bidang = res.data.data))
+      .then((res) => (this.user = res.data.data))
       .catch((err) => console.log(err))
   },
   methods: {
@@ -211,25 +260,50 @@ export default {
       this.xBidang = x.nama_bidang
       this.xId = x.id
     },
-    addBidang() {
-      this.modalTambahBidang = true
+    addUser() {
+      this.modalTambahUser = true
     },
-    saveKegiatan() {
+    saveUser() {
       const data = {
-        bidang_id: this.xId,
-        nama_kegiatan: this.form.namaKegiatan,
+        name: this.form.name,
+        password: this.form.password,
+        role: this.form.role,
       }
-      console.log(data)
-      axios
-        .post('kegiatan', data)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
+      // console.log(data);
+      if (this.form.password == this.form.passwordConfirm) {
+        console.log(data)
+     
+        axios
+          .post('add-user', data)
+          .then((res) => {
+            console.log(res)
+            axios
+              .get('user')
+              .then((res) => (this.user = res.data.data))
+              .catch((err) => console.log(err))
+          })
+          .catch((err) => console.log(err))
 
-      this.visibleLiveDemo = false
+        // axios
+        //   .post(
+        //     `http://127.0.0.1:8000/api/register?name=${data.name}&password=${data.password}&role=${data.role}`,
+        //   )
+        //   .then((res) => {
+        //     this.modalTambahUser = false
+        //     console.log(res)
+        //     axios
+        //       .get('user')
+        //       .then((res) => (this.user = res.data.data))
+        //       .catch((err) => console.log(err))
+        //   } )
+        //   .catch((err) => console.log(err))
+      } else {
+        alert('Password tidak sama !')
+      }
     },
     saveBidang() {
       const data = {
-        nama_bidang: this.formAddBidang.namaBidang,
+        nama_bidang: this.form.namaBidang,
       }
       console.log(data)
       axios
@@ -238,8 +312,8 @@ export default {
         .catch((err) => console.log(err))
 
       this.bidang.push(data)
-      this.formAddBidang.namaBidang = ''
-      this.modalTambahBidang = false
+      this.form.namaBidang = ''
+      this.modalTambahUser = false
     },
     hapusBidang() {
       this.visibleLiveDemo = false
@@ -277,6 +351,38 @@ export default {
       //   .get('bidang')
       //   .then((res) => (this.bidang = res.data.data))
       //   .catch((err) => console.log(err))
+    },
+    passwordReset(x) {
+      let config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+      axios
+        .post(`reset-password/${x}`, config)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => console.log(err))
+    },
+    deleteUser(x) {
+      let config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+      axios
+        .delete(`user/${x}`, config)
+        .then((res) => {
+          console.log(res)
+            axios
+              .get('user')
+              .then((res) => (this.user = res.data.data))
+              .catch((err) => console.log(err))
+        })
+        .catch((err) => console.log(err))
     },
   },
 }

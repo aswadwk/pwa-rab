@@ -2,7 +2,7 @@
   <CRow>
     <CCol class="col-md-4 col-12">
       <CWidgetStatsA class="mb-4" color="primary">
-        <template #value>26K </template>
+        <template #value>{{ bidang.length ? bidang.length : 0 }} </template>
         <template #title>Bidang</template>
 
         <template #chart>
@@ -77,7 +77,7 @@
     </CCol>
     <CCol class="col-md-4 col-12">
       <CWidgetStatsA class="mb-4" color="info">
-        <template #value>$6.200 </template>
+        <template #value>{{ kegiatan.length ? kegiatan.length : 0 }} </template>
         <template #title>Kegiatan</template>
 
         <template #chart>
@@ -151,7 +151,7 @@
     </CCol>
     <CCol class="col-md-4 col-12">
       <CWidgetStatsA class="mb-4" color="warning">
-        <template #value>2.49% </template>
+        <template #value>{{ anggaran.length ? anggaran.length : 0 }} </template>
         <template #title>Anggaran</template>
 
         <template #chart>
@@ -215,10 +215,32 @@
 
 <script>
 import { CChart } from '@coreui/vue-chartjs'
+import axios from 'axios'
 export default {
   name: 'WidgetsStatsA',
   components: {
     CChart,
+  },
+  data() {
+    return {
+      bidang: [],
+      kegiatan: [],
+      anggaran: [],
+    }
+  },
+  mounted() {
+    axios
+      .get('bidang')
+      .then((res) => (this.bidang = res.data.data))
+      .catch((err) => console.log(err))
+    axios
+      .get('kegiatan')
+      .then((res) => (this.kegiatan = res.data.data))
+      .catch((err) => console.log(err))
+    axios
+      .get('anggaran')
+      .then((res) => (this.anggaran = res.data.data))
+      .catch((err) => console.log(err))
   },
 }
 </script>
