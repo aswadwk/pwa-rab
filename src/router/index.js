@@ -89,6 +89,11 @@ const routes = [
         component: () => import('@/views/anggaran/Add-Anggaran.vue'),
       },
       {
+        path: '/material',
+        name: 'Material',
+        component: () => import('@/views/material/Material.vue'),
+      },
+      {
         path: '/user',
         name: 'User',
         component: () => import('@/views/user/User.vue'),

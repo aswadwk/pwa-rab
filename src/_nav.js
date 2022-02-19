@@ -33,6 +33,16 @@ export default [{
 },
 {
     component: 'CNavTitle',
+    name: 'Master',
+},
+{
+    component: 'CNavItem',
+    name: 'Material',
+    to: '/material',
+    icon: 'cil-calculator',
+},
+{
+    component: 'CNavTitle',
     name: 'Users',
 },
 {

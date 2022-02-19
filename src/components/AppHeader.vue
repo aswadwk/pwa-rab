@@ -32,22 +32,21 @@ export default {
     AppBreadcrumb,
     AppHeaderDropdownAccnt,
   },
-  created() {
-    // redirect to home if already logged in
-    if (!authenticationService.currentUserValue) {
-      // return this.$router.push({ name: 'Home' })
-      return this.$router.push({ name: 'Pages' })
-    }else{
-      console.log("User Auth : ", authenticationService.currentUserValue.role)
-      this.role=authenticationService.currentUserValue.role
-      console.log("role : ", this.role)
-    }
-  },
   setup() {
     return {
       logo,
     }
   },
-   
+  created() {
+    // redirect to home if already logged in
+    if (!authenticationService.currentUserValue) {
+      // return this.$router.push({ name: 'Home' })
+      return this.$router.push({ name: 'Pages' })
+    } else {
+      console.log('User Auth : ', authenticationService.currentUserValue.role)
+      this.role = authenticationService.currentUserValue.role
+      console.log('role : ', this.role)
+    }
+  },
 }
 </script>
