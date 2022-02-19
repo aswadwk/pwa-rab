@@ -1,5 +1,11 @@
 <template>
-  <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+  <div
+    class="bg-light min-vh-100 d-flex flex-row align-items-center bg-login"
+    :style="{
+      backgroundImage:
+        'url(' + require('../../assets/images/bglogin.jpg') + ')',
+    }"
+  >
     <CContainer>
       <CRow class="justify-content-center">
         <form @submit.prevent="onSubmit">
@@ -160,3 +166,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bg-login {
+  background-size: cover;
+  background-position: center;
+}
+</style>
