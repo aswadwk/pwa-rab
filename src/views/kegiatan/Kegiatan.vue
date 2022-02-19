@@ -2,7 +2,9 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Kegiatan</h4>
-      <!-- <CButton color="primary">Tambah Kegiatan</CButton> -->
+      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addAnggaran()"
+        >Tambah Anggaran</CButton
+      >
     </CCardHeader>
     <CCardBody>
       <CCardTitle>List Kegiatan yang terdaftar</CCardTitle>
@@ -15,9 +17,12 @@
       <CTable hover>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope="col">#</CTableHeaderCell>
+            <CTableHeaderCell scope="col">NO</CTableHeaderCell>
             <CTableHeaderCell scope="col">Kegiatan</CTableHeaderCell>
             <CTableHeaderCell scope="col">Bidang</CTableHeaderCell>
+            <CTableHeaderCell class="text-center" scope="col"
+              >Aksi</CTableHeaderCell
+            >
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -29,6 +34,24 @@
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
             <CTableDataCell>{{ x.nama_kegiatan }}</CTableDataCell>
             <CTableDataCell>{{ x.bidang.nama_bidang }}</CTableDataCell>
+            <CTableDataCell>
+              <CButton
+                v-if="role == 'OPERATOR'"
+                size="sm"
+                color="primary"
+                @click="editAnggaran()"
+                >Edit</CButton
+              >
+              <CButton
+                v-if="role == 'OPERATOR'"
+                size="sm"
+                class="ml-2 mr-2"
+                color="danger"
+                variant="outline"
+                @click="editAnggaran()"
+                >Hapus</CButton
+              >
+            </CTableDataCell>
           </CTableRow>
         </CTableBody>
       </CTable>
@@ -261,3 +284,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.mr-2 {
+  margin-right: 10px;
+}
+.ml-2 {
+  margin-left: 10px;
+}
+</style>
