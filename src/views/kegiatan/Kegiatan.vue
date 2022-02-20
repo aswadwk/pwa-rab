@@ -73,8 +73,9 @@
     </CModalHeader>
     <CModalBody>
       <div class="d-flex justify-content-between">
-        <h2>{{ xBidang }}</h2>
-        <div>
+        <h4>Form Tambah Anggaran</h4>
+        <!-- <h2>{{ xBidang }}</h2> -->
+        <!-- <div>
           <button
             v-if="role == 'OPERATOR'"
             class="btn btn-sm btn-danger"
@@ -82,39 +83,38 @@
           >
             Hapus
           </button>
-        </div>
+        </div> -->
       </div>
       <div class="submit-form">
-        <!-- <div class="form-group">
-          <label for="kegiatan">Nama Kegiatan</label>
-          <input
-            :value="xId"
-            v-bind="form.idKegiatan"
-            type="text"
-            class="form-control"
-            required
-            name="idkegiatan"
-            readonly
-          />
-          <input
-            :value="xBidang"
-            type="text"
-            class="form-control mb-3"
-            required
-            name="kegiatan"
-            readonly
-          />
-        </div> -->
         <div class="form-group">
-          <label for="namakegiatan">Uraian</label>
-          <input
-            id="namaKegiatan"
-            v-model="form.uraian"
-            class="form-control mb-2"
-            required
-            name="kategori"
-            placeholder="masukkan uraian"
-          />
+          <label for="bidang">Bidang</label>
+          <CFormSelect
+            v-model="form.kegiatan_id"
+            name="bidang"
+            size="sm"
+            class="mb-3"
+            aria-label="Small select example"
+          >
+            <option>Pilih Kegiatan</option>
+            <option v-for="x in kegiatan" :key="x.id" value="x.id">
+              {{ x.nama_kegiatan }}
+            </option>
+          </CFormSelect>
+        </div>
+        <div class="form-group">
+          <label for="namakegiatan">Material</label>
+          <CFormSelect
+            v-model="form.material"
+            name="bidang"
+            size="sm"
+            class="mb-3"
+            aria-label="Small select example"
+          >
+            <option>Pilih Material</option>
+            <option v-for="x in material" :key="x.id" value="x.id">
+              {{ x.name }}
+            </option>
+          </CFormSelect>
         </div>
         <div class="form-group">
           <label for="namakegiatan">Volume</label>
@@ -190,10 +190,13 @@ export default {
         satuan: '',
         hargaSatuan: '',
         total: '',
+        kegiatan_id: '',
+        material: '',
       },
       jumlahTotal: '',
 
       kegiatan: [],
+      material: [],
       visibleLiveDemo: false,
     }
   },
@@ -223,6 +226,10 @@ export default {
       .get('kegiatan')
       .then((res) => (this.kegiatan = res.data.data))
       .catch((err) => console.log(err))
+    axios
+      .get('material')
+      .then((res) => (this.material = res.data.data))
+      .catch((err) => console.log(err))
   },
   methods: {
     vTotal() {
@@ -234,13 +241,14 @@ export default {
     addKategori(x) {
       this.visibleLiveDemo = true
       console.log(x)
+      console.log(this.kegiatan)
       this.xBidang = x.nama_kegiatan
       this.xId = x.id
     },
     saveAnggaran() {
       const data = {
-        kegiatan_id: this.xId,
-        uraian: this.form.uraian,
+        kegiatan_id: this.form.kegiatan_id,
+        material: this.form.material,
         volume: this.form.volume,
         satuan: this.form.satuan,
         harga_satuan: this.form.hargaSatuan,
