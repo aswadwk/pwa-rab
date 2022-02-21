@@ -2,7 +2,7 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Kegiatan</h4>
-      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addAnggaran()"
+      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addKategori()"
         >Tambah Anggaran</CButton
       >
     </CCardHeader>
@@ -29,7 +29,7 @@
           <CTableRow
             v-for="(x, index) in filteredRows"
             :key="x.id"
-            @click="addKategori(x)"
+            @click="detailAnggaranByKegiatan(x)"
           >
             <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
             <CTableDataCell>{{ x.nama_kegiatan }}</CTableDataCell>
@@ -38,9 +38,9 @@
               <CButton
                 v-if="role == 'OPERATOR'"
                 size="sm"
-                color="primary"
-                @click="editAnggaran()"
-                >Edit</CButton
+                color="success"
+                @click="downloadAnggaran(x.id)"
+                >Download</CButton
               >
               <CButton
                 v-if="role == 'OPERATOR'"
@@ -57,6 +57,7 @@
       </CTable>
     </CCardBody>
   </CCard>
+
   <!-- modal tambah Anggaran -->
   <CModal
     v-if="role == 'OPERATOR'"
@@ -74,35 +75,28 @@
     <CModalBody>
       <div class="d-flex justify-content-between">
         <h4>Form Tambah Anggaran</h4>
-        <!-- <h2>{{ xBidang }}</h2> -->
-        <!-- <div>
-          <button
-            v-if="role == 'OPERATOR'"
-            class="btn btn-sm btn-danger"
-            @click="hapusKegiatan"
-          >
-            Hapus
-          </button>
-        </div> -->
       </div>
       <div class="submit-form">
         <div class="form-group">
-          <label for="bidang">Bidang</label>
+          <label for="bidang">Pilih Kegiatan {{ form.kegiatan_id }}</label>
           <CFormSelect
             v-model="form.kegiatan_id"
             name="bidang"
             size="sm"
             class="mb-3"
             aria-label="Small select example"
+            @change="onChangeKegiatan($event)"
           >
             <option>Pilih Kegiatan</option>
-            <option v-for="x in kegiatan" :key="x.id" value="x.id">
-              {{ x.nama_kegiatan }}
+            <option v-for="(x, index) in kegiatan" :key="index" :value="x.id">
+              {{ x.nama_kegiatan }} {{ x.id }}
             </option>
+            <!-- <option value="1">satu</option>
+            <option value="dua">dua</option> -->
           </CFormSelect>
         </div>
         <div class="form-group">
-          <label for="namakegiatan">Material</label>
+          <label for="namakegiatan">Material {{ form.material }}</label>
           <CFormSelect
             v-model="form.material"
             name="bidang"
@@ -111,8 +105,13 @@
             aria-label="Small select example"
           >
             <option>Pilih Material</option>
-            <option v-for="x in material" :key="x.id" value="x.id">
-              {{ x.name }}
+            <option
+              v-for="x in material"
+              :key="x.id"
+              :value="x.id"
+              @click="materialClick(x)"
+            >
+              {{ x.name }}{{ x.id }}
             </option>
           </CFormSelect>
         </div>
@@ -173,6 +172,59 @@
       >
     </CModalFooter>
   </CModal>
+
+  <!-- modal detail -->
+  <CModal
+    v-if="role == 'OPERATOR'"
+    size="xl"
+    :visible="modalDetail"
+    @close="
+      () => {
+        modalDetail = false
+      }
+    "
+  >
+    <CModalHeader>
+      <CModalTitle>Detail </CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+      <div class="d-flex justify-content-between">
+        <h4>Detail {{ aDetailName }}</h4>
+      </div>
+      <CTable striped>
+        <CTableHead>
+          <CTableRow>
+            <CTableHeaderCell scope="col">#</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Material</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Satuan</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Volume</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Total</CTableHeaderCell>
+          </CTableRow>
+        </CTableHead>
+        <CTableBody>
+          <CTableRow v-for="(x, index) in detail_anggaran" :key="x.id">
+            <CTableDataCell>{{ index + 1 }}</CTableDataCell>
+            <CTableDataCell>{{ x.uraian }}</CTableDataCell>
+            <CTableDataCell>{{ x.satuan }}</CTableDataCell>
+            <CTableDataCell>{{ x.volume }}</CTableDataCell>
+            <CTableDataCell>{{ x.jumlah_total }}</CTableDataCell>
+          </CTableRow>
+        </CTableBody>
+      </CTable>
+    </CModalBody>
+    <CModalFooter>
+      <CButton
+        color="secondary"
+        @click="
+          () => {
+            modalDetail = false
+          }
+        "
+      >
+        Close
+      </CButton>
+    </CModalFooter>
+  </CModal>
 </template>
 <script>
 // import axios from '../../axios'
@@ -197,7 +249,11 @@ export default {
 
       kegiatan: [],
       material: [],
+      detail_anggaran: [],
       visibleLiveDemo: false,
+      modalDetail: false,
+      add_kegiatan_id: '',
+      aDetailName: '',
     }
   },
   computed: {
@@ -248,7 +304,8 @@ export default {
     saveAnggaran() {
       const data = {
         kegiatan_id: this.form.kegiatan_id,
-        material: this.form.material,
+        // material: this.form.material,
+        uraian: this.form.uraian,
         volume: this.form.volume,
         satuan: this.form.satuan,
         harga_satuan: this.form.hargaSatuan,
@@ -257,10 +314,12 @@ export default {
       console.log(data)
       axios
         .post('anggaran', data)
-        .then((res) => console.log(res))
+        .then((res) => {
+          console.log(res)
+          this.visibleLiveDemo = false
+        })
         .catch((err) => console.log(err))
       // close modal
-      this.visibleLiveDemo = false
     },
     hapusKegiatan() {
       this.visibleLiveDemo = false
@@ -288,6 +347,32 @@ export default {
       }
 
       deleteKegiatan()
+    },
+    onChangeKegiatan(x) {
+      this.form.kegiatan_id = x.target.value
+      console.log(x)
+      console.log(this.form.kegiatan_id)
+      console.log(x.target.value)
+    },
+    materialClick(x) {
+      const data = { ...x }
+      this.form.satuan = data.satuan
+      this.form.hargaSatuan = data.harga
+      this.form.uraian = data.name
+      console.log('Data Meterial ', { ...this.material })
+      console.log('Material ', data)
+      console.log('Material Name ', data.name)
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
+    },
+    detailAnggaranByKegiatan(x) {
+      this.modalDetail = true
+      const data = { ...x }
+      this.aDetailName = data.nama_kegiatan
+      console.log('Detail Anggaran ', data)
+      axios
+        .get(`kegiatan/${data.id}`)
+        .then((res) => (this.detail_anggaran = res.data.data))
+        .catch((err) => console.log(err))
     },
   },
 }
