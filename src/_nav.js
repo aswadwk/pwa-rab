@@ -25,12 +25,12 @@ export default [{
     to: '/kegiatan',
     icon: 'cil-notes',
 },
-{
-    component: 'CNavItem',
-    name: 'Anggaran',
-    to: '/anggaran',
-    icon: 'cil-calculator',
-},
+// {
+//     component: 'CNavItem',
+//     name: 'Anggaran',
+//     to: '/anggaran',
+//     icon: 'cil-calculator',
+// },
 {
     component: 'CNavTitle',
     name: 'Master',
