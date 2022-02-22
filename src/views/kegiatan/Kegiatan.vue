@@ -14,7 +14,7 @@
         type="text"
         placeholder="Filter"
       />
-      <CTable hover class="table-responsive" responsive>
+      <CTable hover class="table-responsive" responsive small>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">NO</CTableHeaderCell>
@@ -198,7 +198,7 @@
       <div class="d-flex justify-content-between">
         <h4>Detail {{ aDetailName }}</h4>
       </div>
-      <CTable striped>
+      <CTable striped small responsive>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
