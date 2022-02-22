@@ -26,14 +26,18 @@
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          <CTableRow
-            v-for="(x, index) in filteredRows"
-            :key="x.id"
-            @click="detailAnggaranByKegiatan(x)"
-          >
-            <CTableHeaderCell scope="row">{{ index + 1 }}</CTableHeaderCell>
-            <CTableDataCell>{{ x.nama_kegiatan }}</CTableDataCell>
-            <CTableDataCell>{{ x.bidang.nama_bidang }}</CTableDataCell>
+          <CTableRow v-for="(x, index) in filteredRows" :key="x.id">
+            <CTableHeaderCell
+              scope="row"
+              @click="detailAnggaranByKegiatan(x)"
+              >{{ index + 1 }}</CTableHeaderCell
+            >
+            <CTableDataCell @click="detailAnggaranByKegiatan(x)">{{
+              x.nama_kegiatan
+            }}</CTableDataCell>
+            <CTableDataCell @click="detailAnggaranByKegiatan(x)">{{
+              x.bidang.nama_bidang
+            }}</CTableDataCell>
             <CTableDataCell>
               <CButton
                 v-if="role == 'OPERATOR'"
@@ -396,6 +400,13 @@ export default {
         .get(`kegiatan/${data.id}`)
         .then((res) => (this.detail_anggaran = res.data.data))
         .catch((err) => console.log(err))
+    },
+    downloadAnggaran(xKegiatanId) {
+      // window.open(`https://api.passoloran.com/api/anggaran-excel/${xKegiatanId}`, '_blank')
+      window.open(
+        `https://api.passoloran.com/api/anggaran-excel_id/${xKegiatanId}`,
+        '_blank',
+      )
     },
   },
 }
