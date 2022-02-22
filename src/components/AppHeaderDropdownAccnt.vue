@@ -8,7 +8,8 @@
         Account
       </CDropdownHeader>
       <CDropdownItem @click="logout">
-        <CIcon icon="cil-lock-locked" />
+        <!-- <CIcon icon="cil-lock-locked" /> -->
+        <CIcon icon="cil-data-transfer-down" />
         Logout
       </CDropdownItem>
     </CDropdownMenu>

@@ -9,7 +9,7 @@
         <h4>RAB</h4>
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto"> </CHeaderNav>
-      <h3 class="float-right">{{ role }}</h3>
+      <h5 class="float-right">{{ role }}</h5>
       <CHeaderNav>
         <AppHeaderDropdownAccnt />
       </CHeaderNav>

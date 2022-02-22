@@ -12,12 +12,8 @@
     "
   >
     <CSidebarBrand>
-      App RAB
-      <!-- <CIcon
-        custom-class-name="sidebar-brand-full"
-        :icon="logoNegative"
-        :height="35"
-      /> -->
+      <!-- <CIcon custom-class-name="sidebar-brand-full" :icon="logo" :height="35" /> -->
+      <h5 class="p-2">App RAB</h5>
       <!-- <CIcon
         custom-class-name="sidebar-brand-narrow"
         :icon="sygnet"
@@ -37,6 +33,7 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AppSidebarNav } from './AppSidebarNav'
 import { logoNegative } from '@/assets/brand/logo-negative'
+import logo from '@/assets/icons/logo.png'
 import { sygnet } from '@/assets/brand/sygnet'
 export default {
   name: 'AppSidebar',
@@ -47,6 +44,7 @@ export default {
     const store = useStore()
     return {
       logoNegative,
+      logo,
       sygnet,
       sidebarUnfoldable: computed(() => store.state.sidebarUnfoldable),
       sidebarVisible: computed(() => store.state.sidebarVisible),
@@ -54,3 +52,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.p-2 {
+  padding-left: 10px;
+}
+</style>
