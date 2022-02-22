@@ -2,7 +2,7 @@
   <CCard>
     <CCardHeader class="d-flex justify-content-between">
       <h4>List Kegiatan</h4>
-      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addKategori()"
+      <CButton v-if="role == 'OPERATOR'" color="primary" @click="addAnggaran()"
         >Tambah Anggaran</CButton
       >
     </CCardHeader>
@@ -81,37 +81,44 @@
           <label for="bidang">Pilih Kegiatan {{ form.kegiatan_id }}</label>
           <CFormSelect
             v-model="form.kegiatan_id"
-            name="bidang"
+            name="kegiatan"
             size="sm"
             class="mb-3"
             aria-label="Small select example"
             @change="onChangeKegiatan($event)"
           >
             <option>Pilih Kegiatan</option>
-            <option v-for="(x, index) in kegiatan" :key="index" :value="x.id">
+            <option
+              v-for="(x, index) in kegiatan"
+              :key="index"
+              :value="x.id"
+              @click="testFunction(alert('test'))"
+            >
               {{ x.nama_kegiatan }} {{ x.id }}
             </option>
-            <!-- <option value="1">satu</option>
-            <option value="dua">dua</option> -->
           </CFormSelect>
         </div>
         <div class="form-group">
           <label for="namakegiatan">Material {{ form.material }}</label>
           <CFormSelect
             v-model="form.material"
-            name="bidang"
+            name="material"
             size="sm"
             class="mb-3"
-            aria-label="Small select example"
+            @change="onChangeMaterial($event)"
           >
-            <option>Pilih Material</option>
+            <option>Silahkan Pilih Material</option>
             <option
-              v-for="x in material"
-              :key="x.id"
+              v-for="(x, index) in material"
+              :key="index"
               :value="x.id"
-              @click="materialClick(x)"
+              @click="
+                () => {
+                  alert(x)
+                }
+              "
             >
-              {{ x.name }}{{ x.id }}
+              {{ x.name }} {{ x.id }}
             </option>
           </CFormSelect>
         </div>
@@ -301,10 +308,12 @@ export default {
       this.xBidang = x.nama_kegiatan
       this.xId = x.id
     },
+    addAnggaran() {
+      this.visibleLiveDemo = true
+    },
     saveAnggaran() {
       const data = {
         kegiatan_id: this.form.kegiatan_id,
-        // material: this.form.material,
         uraian: this.form.uraian,
         volume: this.form.volume,
         satuan: this.form.satuan,
@@ -362,6 +371,20 @@ export default {
       console.log('Data Meterial ', { ...this.material })
       console.log('Material ', data)
       console.log('Material Name ', data.name)
+      this.jumlahTotal = this.form.volume * this.form.hargaSatuan
+    },
+    onClickMaterial(x) {
+      console.log('Material ', x)
+    },
+    onChangeMaterial(x) {
+      console.log(
+        'Material Target',
+        this.material[x.target.options.selectedIndex - 1],
+      )
+      const data = this.material[x.target.options.selectedIndex - 1]
+      this.form.satuan = data.satuan
+      this.form.hargaSatuan = data.harga
+      this.form.uraian = data.name
       this.jumlahTotal = this.form.volume * this.form.hargaSatuan
     },
     detailAnggaranByKegiatan(x) {
