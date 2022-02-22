@@ -14,7 +14,7 @@
         type="text"
         placeholder="Filter"
       />
-      <CTable hover>
+      <CTable hover responsive small>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
@@ -37,11 +37,13 @@
               <CButton
                 v-if="role == 'OPERATOR'"
                 color="primary"
+                size="sm"
                 @click="passwordReset(x.id)"
                 >Reset Password</CButton
               >
               <CButton
                 v-if="role == 'OPERATOR'"
+                size="sm"
                 class="btn btn-md btn-danger ml-2 mr-2"
                 @click="deleteUser(x.id)"
                 >Hapus</CButton
@@ -272,7 +274,7 @@ export default {
       // console.log(data);
       if (this.form.password == this.form.passwordConfirm) {
         console.log(data)
-     
+
         axios
           .post('add-user', data)
           .then((res) => {
@@ -377,13 +379,22 @@ export default {
         .delete(`user/${x}`, config)
         .then((res) => {
           console.log(res)
-            axios
-              .get('user')
-              .then((res) => (this.user = res.data.data))
-              .catch((err) => console.log(err))
+          axios
+            .get('user')
+            .then((res) => (this.user = res.data.data))
+            .catch((err) => console.log(err))
         })
         .catch((err) => console.log(err))
     },
   },
 }
 </script>
+
+<style scoped>
+.mr-2 {
+  margin-right: 10px;
+}
+.ml-2 {
+  margin-left: 10px;
+}
+</style>

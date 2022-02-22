@@ -15,7 +15,7 @@
         type="text"
         placeholder="Filter"
       />
-      <CTable hover>
+      <CTable hover responsive small>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope="col">#</CTableHeaderCell>
