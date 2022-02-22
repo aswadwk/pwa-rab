@@ -52,7 +52,7 @@
                 class="ml-2 mr-2"
                 color="danger"
                 variant="outline"
-                @click="editAnggaran()"
+                @click="deleteKegiatan(x.id)"
                 >Hapus</CButton
               >
             </CTableDataCell>
@@ -334,32 +334,44 @@ export default {
         .catch((err) => console.log(err))
       // close modal
     },
-    hapusKegiatan() {
-      this.visibleLiveDemo = false
+    // hapusKegiatan() {
+    //   this.visibleLiveDemo = false
 
-      const getKegiatan = async () => {
-        try {
-          const resp = await axios.get('kegiatan')
-          console.log(resp.data.data)
-          this.kegiatan = resp.data.data
-        } catch (err) {
-          // Handle Error Here
-          console.error(err)
-        }
-      }
+    //   const getKegiatan = async () => {
+    //     try {
+    //       const resp = await axios.get('kegiatan')
+    //       console.log(resp.data.data)
+    //       this.kegiatan = resp.data.data
+    //     } catch (err) {
+    //       // Handle Error Here
+    //       console.error(err)
+    //     }
+    //   }
 
-      const deleteKegiatan = async () => {
-        try {
-          const resp = await axios.delete(`kegiatan/${this.xId}`)
-          console.log(resp.data)
-          getKegiatan()
-        } catch (err) {
-          // Handle Error Here
-          console.error(err)
-        }
-      }
+    //   const deleteKegiatan = async (x) => {
+    //     try {
+    //       const resp = await axios.delete(`kegiatan/${x}`)
+    //       console.log(resp.data)
+    //       getKegiatan()
+    //     } catch (err) {
+    //       // Handle Error Here
+    //       console.error(err)
+    //     }
+    //   }
 
-      deleteKegiatan()
+    //   deleteKegiatan(x)
+    // },
+    deleteKegiatan(x) {
+      axios
+        .delete(`kegiatan/${x}`)
+        .then((res) => {
+          console.log(res)
+          axios
+            .get('kegiatan')
+            .then((res) => (this.kegiatan = res.data.data))
+            .catch((err) => console.log(err))
+        })
+        .catch((err) => console.log(err))
     },
     onChangeKegiatan(x) {
       this.form.kegiatan_id = x.target.value
