@@ -97,7 +97,7 @@
               :value="x.id"
               @click="testFunction(alert('test'))"
             >
-              {{ x.nama_kegiatan }} {{ x.id }}
+              {{ x.nama_kegiatan }} 
             </option>
           </CFormSelect>
         </div>
@@ -121,7 +121,7 @@
                 }
               "
             >
-              {{ x.name }} {{ x.id }}
+              {{ x.name }} 
             </option>
           </CFormSelect>
         </div>
@@ -185,7 +185,6 @@
 
   <!-- modal detail -->
   <CModal
-    v-if="role == 'OPERATOR'"
     size="xl"
     :visible="modalDetail"
     @close="
