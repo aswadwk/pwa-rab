@@ -40,7 +40,6 @@
             }}</CTableDataCell>
             <CTableDataCell>
               <CButton
-                v-if="role == 'OPERATOR'"
                 size="sm"
                 color="success"
                 @click="downloadAnggaran(x.id)"
